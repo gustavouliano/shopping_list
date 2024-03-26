@@ -47,7 +47,10 @@ class User {
         this.password = password;
     }
 
-    public getProductList(): ProductList | null {
+    public getProductList(): ProductList {
+        if (!this.productList){
+            return new ProductList();
+        }
         return this.productList;
     }
 

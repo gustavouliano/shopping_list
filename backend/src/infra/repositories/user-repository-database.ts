@@ -1,8 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import User from "../../domain/entities/user";
+import Product from '../../domain/entities/product';
 
 class UserRepositoryDatabase {
+
+    async saveUsers(users: User[]){
+        fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', 'users.json'), JSON.stringify(users, null, 2));
+    }
 
     async getAll(): Promise<User[]> {
         try {
@@ -32,6 +37,18 @@ class UserRepositoryDatabase {
         users.push(user);
         fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', 'users.json'), JSON.stringify(users, null, 2));
         return user;
+    }
+
+    async addProduct(userId: string, products: Product[]){
+        const users = await this.getAll();
+        const findUser = users.find((user) => user.getId() == userId);
+        if (!findUser){
+            throw new Error('User does not exists');
+        }
+
+        const productList = findUser.getProductList();
+        products.forEach(product => productList.addProduct(product));
+
     }
 }
 
