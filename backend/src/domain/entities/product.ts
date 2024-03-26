@@ -1,22 +1,12 @@
 
 class Product {
 
-    private id: string;
     private description: string;
     private value: number;
 
-    constructor(id: string, description: string, value: number){
-        this.id = id;
+    constructor(description: string, value: number){
         this.description = description;
         this.value = value;
-    }
-
-    public getId(): string {
-        return this.id;
-    }
-
-    public setId(id: string) {
-        this.id = id;
     }
 
     public getDescription(): string {

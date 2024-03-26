@@ -7,5 +7,7 @@ const userController = new UserController();
 router.get('/', userController.getUsers.bind(userController));
 router.post('/', userController.create.bind(userController));
 router.post('/login', userController.login.bind(userController));
+router.post('/products/', userController.addProduct.bind(userController));
+router.delete('/products/:name', userController.removeProduct.bind(userController));
 
 export { router as usersRouter };

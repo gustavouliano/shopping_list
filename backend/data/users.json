@@ -1,13 +1,23 @@
 [
   {
-    "productList": null,
-    "id": "dd500095-a3eb-418c-8030-4881cd522859",
-    "name": "gustavo",
-    "email": "gustavouliano11@gmail.com",
-    "password": "$2b$10$L5WZv3qXSKhpoB/oxXZDM.IwxF9g5oDaa21thmy1NjlNaEQ3BTBT."
-  },
-  {
-    "productList": null,
+    "productList": {
+      "product": [
+        {
+          "description": "macarrão",
+          "value": "5"
+        },
+        {
+          "description": "coca-cola",
+          "value": "5"
+        },
+        {
+          "description": "banana",
+          "value": "1"
+        }
+      ],
+      "total": 0,
+      "quantity": 0
+    },
     "id": "289522fb-fe25-4761-9a22-312d711f30ea",
     "name": "a",
     "email": "a",

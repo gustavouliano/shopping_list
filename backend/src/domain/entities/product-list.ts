@@ -1,4 +1,3 @@
-import { threadId } from "worker_threads";
 import Product from "./product";
 
 class ProductList {
@@ -17,6 +16,10 @@ class ProductList {
 
     public addProduct(product: Product) {
         this.product.push(product);
+    }
+
+    public removeProduct(productDescription: string) {
+        
     }
 
     public getTotal(): number {

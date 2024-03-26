@@ -8,7 +8,6 @@ const loginUser = (rl, userLogado) => {
                     email: email,
                     password: password
                 };
-    
                 axios({
                     method: 'post',
                     url: 'http://localhost:3000/users/login',

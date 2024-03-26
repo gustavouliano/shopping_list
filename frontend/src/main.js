@@ -28,14 +28,64 @@ const acaoUsuarioGeral = async () => {
     });
 };
 
-
-const acaoUsuarioLogado = async () => {
+const acaoUsuarioLogado = () => {
     return new Promise((resolve, reject) => {
-
+        rl.question('Deseja adicionar ou remover um produto? (adicionar/remover/listar): ', (action) => {
+            if (action.toLowerCase() === 'adicionar') {
+                rl.question('Qual o nome do produto? ', (productName) => {
+                    rl.question('Qual a quantidade do produto? ', (productQuantity) => {
+                        console.log(`Adicionando produto: ${productName}, Quantidade: ${productQuantity}`);
+                        axios({
+                            method: 'post',
+                            url: 'http://localhost:3000/users/products',
+                            headers: {
+                              'content-type': 'application/json',
+                            },
+                            data: {
+                                userId: userLogado.id,
+                                description: productName,
+                                quantity: productQuantity
+                            }
+                          })
+                            .then(response => {
+                              console.log('Produto adicionado com sucesso.');
+                              rl.close();
+                            })
+                            .catch(error => {
+                              console.log('Erro ao adicionar produto: ', error);
+                              rl.close();
+                            });
+                    });
+                });
+            } else if (action.toLowerCase() === 'remover') {
+                rl.question('Qual o nome do produto? ', (productName) => {
+                    console.log(`Removendo produto: ${productName}`);
+                    axios({
+                        method: 'delete',
+                        url: 'http://localhost:3000/users/products/' + productName,
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        data: {
+                            userId: userLogado.id,
+                        }
+                        })
+                        .then(response => {
+                            console.log('Produto removido com sucesso.');
+                            rl.close();
+                        })
+                        .catch(error => {
+                            console.log('Erro ao remover produto: ', error);
+                            rl.close();
+                        });
+                });
+            } else {
+                console.log('Ação não reconhecida. Por favor, tente novamente.');
+            }
+            acaoUsuarioLogado();
+        });
     })
 }
-
-
 
 
 

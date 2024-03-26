@@ -3,6 +3,7 @@ import GetUsersUseCase from "../../domain/use-cases/user/get-users";
 import CreateUserUseCase from "../../domain/use-cases/user/create-user";
 import UserRepositoryDatabase from "../../infra/repositories/user-repository-database";
 import LoginUserUseCase from "../../domain/use-cases/user/login-user";
+import AddProductUserUseCase from "../../domain/use-cases/user/add-product-user";
 
 class UserController {
 
@@ -43,6 +44,27 @@ class UserController {
         }
     }
 
+    async addProduct(req: Request, res: Response) {
+        try {
+            const {userId, description, quantity} = req.body;
+            const addProductUserUseCase = new AddProductUserUseCase(this.userRepository);
+            await addProductUserUseCase.execute(userId, description, quantity); 
+            return res.json().status(201);
+        } catch(error) {
+            console.log(error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
+
+    async removeProduct(req: Request, res: Response) {
+        try {
+            console.log(req.params);
+            console.log(req.body);
+        } catch(error) {
+            console.log(error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
 
 }
 

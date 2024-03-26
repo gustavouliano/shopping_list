@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import User from "../../domain/entities/user";
 import Product from '../../domain/entities/product';
+import ProductList from '../../domain/entities/product-list';
+import { isArray } from 'util';
 
 class UserRepositoryDatabase {
 
@@ -17,7 +19,7 @@ class UserRepositoryDatabase {
     
             parsedData.forEach((userData: any) => {
                 const user = new User(userData.id, userData.name, userData.email, userData.password);
-                user.setProductList(userData.productList);
+                user.getProductList().setProduct(userData.productList.product);
                 users.push(user);
             });
     
@@ -39,16 +41,27 @@ class UserRepositoryDatabase {
         return user;
     }
 
-    async addProduct(userId: string, products: Product[]){
+    async addProduct(userId: string, products: Product[]) {
         const users = await this.getAll();
         const findUser = users.find((user) => user.getId() == userId);
         if (!findUser){
             throw new Error('User does not exists');
         }
+        products.forEach((product) => {
+            console.log(product);
+            findUser.getProductList().addProduct(product);
+        });
+        await this.saveUsers([findUser]);
+    }
 
-        const productList = findUser.getProductList();
-        products.forEach(product => productList.addProduct(product));
-
+    async removeProduct(userId: string, productDescription: string) {
+        const users = await this.getAll();
+        const findUser = users.find((user) => user.getId() == userId);
+        if (!findUser){
+            throw new Error('User does not exists');
+        }
+        findUser.getProductList(); 
+        await this.saveUsers([findUser]);
     }
 }
 
