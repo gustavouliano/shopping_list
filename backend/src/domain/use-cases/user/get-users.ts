@@ -10,7 +10,7 @@ class GetUsersUseCase {
     }
 
     async execute(): Promise<User[]> {
-        return this.userRepository.getAll();
+        return await this.userRepository.getAll();
     }
 }
 

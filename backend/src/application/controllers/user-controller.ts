@@ -2,28 +2,43 @@ import { Request, Response } from "express";
 import GetUsersUseCase from "../../domain/use-cases/user/get-users";
 import CreateUserUseCase from "../../domain/use-cases/user/create-user";
 import UserRepositoryDatabase from "../../infra/repositories/user-repository-database";
+import LoginUserUseCase from "../../domain/use-cases/user/login-user";
 
 class UserController {
 
-    constructor(private userRepository = new UserRepositoryDatabase()){};
+    private userRepository = new UserRepositoryDatabase();
 
-    async getUsers(req: Request, res: Response){ 
+    async getUsers(req: Request, res: Response) { 
         try {
             const getUsersUseCase = new GetUsersUseCase(this.userRepository);
-            const users = getUsersUseCase.execute();
+            const users = await getUsersUseCase.execute();
             return res.json(users).status(200);
         } catch (error) {
+            console.log(error);
             return res.status(500).send('Internal Server Error');
         }
     }
 
     async create(req: Request, res: Response) {
-        try{
-            const [name, email, password] = req.body;
+        try {
+            const {name, email, password} = req.body;
             const createUserUseCase = new CreateUserUseCase(this.userRepository);
-            const user = createUserUseCase.execute(name, email, password);
+            const user = await createUserUseCase.execute(name, email, password);
             return res.json(user).status(201);
         } catch(error) {
+            console.log(error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
+
+    async login(req: Request, res: Response) {
+        try {
+            const {email, password} = req.body;
+            const loginUserUseCase = new LoginUserUseCase(this.userRepository);
+            const login = await loginUserUseCase.execute(email, password);
+            return res.json({login: login}).status(200);
+        } catch(error) {
+            console.log(error);
             return res.status(500).send('Internal Server Error');
         }
     }
