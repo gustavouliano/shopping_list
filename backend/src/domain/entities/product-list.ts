@@ -19,7 +19,7 @@ class ProductList {
     }
 
     public removeProduct(productDescription: string) {
-        
+        this.product = this.product.filter(product => product.getDescription() !== productDescription);   
     }
 
     public getTotal(): number {

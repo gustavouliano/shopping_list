@@ -1,5 +1,4 @@
 import UserRepositoryDatabase from "../../../infra/repositories/user-repository-database";
-import Product from "../../entities/product";
 
 class RemoveProductUserUseCase {
 

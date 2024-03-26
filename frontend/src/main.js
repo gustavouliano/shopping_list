@@ -30,7 +30,7 @@ const acaoUsuarioGeral = async () => {
 
 const acaoUsuarioLogado = () => {
     return new Promise((resolve, reject) => {
-        rl.question('Deseja adicionar ou remover um produto? (adicionar/remover/listar): ', (action) => {
+        rl.question('Deseja adicionar ou remover um produto? (adicionar/remover/listar/calcular): ', (action) => {
             if (action.toLowerCase() === 'adicionar') {
                 rl.question('Qual o nome do produto? ', (productName) => {
                     rl.question('Qual a quantidade do produto? ', (productQuantity) => {
@@ -39,21 +39,22 @@ const acaoUsuarioLogado = () => {
                             method: 'post',
                             url: 'http://localhost:3000/users/products',
                             headers: {
-                              'content-type': 'application/json',
+                                'content-type': 'application/json',
                             },
                             data: {
                                 userId: userLogado.id,
                                 description: productName,
                                 quantity: productQuantity
                             }
-                          })
+                        })
                             .then(response => {
-                              console.log('Produto adicionado com sucesso.');
-                              rl.close();
+                                console.log('Produto adicionado com sucesso.');
+                                acaoUsuarioLogado();
+                                // rl.close();
                             })
                             .catch(error => {
-                              console.log('Erro ao adicionar produto: ', error);
-                              rl.close();
+                                console.log('Erro ao adicionar produto: ', error);
+                                // rl.close();
                             });
                     });
                 });
@@ -62,23 +63,64 @@ const acaoUsuarioLogado = () => {
                     console.log(`Removendo produto: ${productName}`);
                     axios({
                         method: 'delete',
-                        url: 'http://localhost:3000/users/products/' + productName,
+                        url: 'http://localhost:3000/users/products/' + userLogado.id,
                         headers: {
                             'content-type': 'application/json',
                         },
                         data: {
-                            userId: userLogado.id,
+                            productDescription: productName,
                         }
-                        })
+                    })
                         .then(response => {
                             console.log('Produto removido com sucesso.');
-                            rl.close();
+                            // rl.close();
                         })
                         .catch(error => {
                             console.log('Erro ao remover produto: ', error);
-                            rl.close();
+                            // rl.close();
                         });
                 });
+            } else if (action.toLowerCase() == 'listar') {
+                axios({
+                    method: 'get',
+                    url: 'http://localhost:3000/users/products/' + userLogado.id,
+                    headers: {
+                        'content-type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        const products = response.data.products;
+                        console.clear();
+                        products.forEach(product => {
+                            console.log("Produto: " + product.description + "| Qtd: " + product.quantity);
+                        });
+                        setTimeout(() => {
+                            acaoUsuarioLogado();
+                        }, 1000)
+                        // rl.close();
+                    })
+                    .catch(error => {
+                        console.log('Erro ao listar produtos ', error);
+                        // rl.close();
+                    });
+            } else if (action.toLowerCase() == 'calcular') {
+                axios({
+                    method: 'get',
+                    url: 'http://localhost:3000/users/products/calculate/' + userLogado.id,
+                    headers: {
+                        'content-type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        const productQuantity = response.data.productQuantity;
+                        console.log("Total de produtos na lista (somando todas as quantidades): " + productQuantity);
+                        acaoUsuarioLogado();
+                        // rl.close();
+                    })
+                    .catch(error => {
+                        console.log('Erro ao listar produtos ', error);
+                        // rl.close();
+                    });
             } else {
                 console.log('Ação não reconhecida. Por favor, tente novamente.');
             }

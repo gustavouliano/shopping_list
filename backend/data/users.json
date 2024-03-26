@@ -4,15 +4,11 @@
       "product": [
         {
           "description": "macarrão",
-          "value": "5"
+          "quantity": 1
         },
         {
           "description": "coca-cola",
-          "value": "5"
-        },
-        {
-          "description": "banana",
-          "value": "1"
+          "quantity": 1
         }
       ],
       "total": 0,
@@ -22,5 +18,37 @@
     "name": "a",
     "email": "a",
     "password": "$2b$10$qvhD73QYGLOStsS0gRsOKeZZY47i/ImmKczDPSOYXjUKVPt85nJ7a"
+  },
+  {
+    "productList": {
+      "product": [
+        {
+          "description": "Macarrão",
+          "quantity": 1
+        },
+        {
+          "description": "arroz",
+          "quantity": 1
+        },
+        {
+          "description": "arroz",
+          "quantity": 1
+        },
+        {
+          "description": "feijão",
+          "quantity": "1"
+        },
+        {
+          "description": "farinha de trigo",
+          "quantity": "10"
+        }
+      ],
+      "total": 0,
+      "quantity": 0
+    },
+    "id": "ad64895b-1865-420a-93c2-29fb34935950",
+    "name": "admin",
+    "email": "admin@gmail.com",
+    "password": "$2b$10$mwIPg44Pn201ZrnLhZxiq.Eu2GNNs2h6ZFae5XaAYqlnXAL09U2ai"
   }
 ]

@@ -3,11 +3,10 @@ import path from 'path';
 import User from "../../domain/entities/user";
 import Product from '../../domain/entities/product';
 import ProductList from '../../domain/entities/product-list';
-import { isArray } from 'util';
 
 class UserRepositoryDatabase {
 
-    async saveUsers(users: User[]){
+    async saveUsers(users: User[]) {
         fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', 'users.json'), JSON.stringify(users, null, 2));
     }
 
@@ -16,16 +15,22 @@ class UserRepositoryDatabase {
             const data = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'data', 'users.json'), 'utf8');
             const parsedData = JSON.parse(data);
             const users: User[] = [];
-    
+
             parsedData.forEach((userData: any) => {
                 const user = new User(userData.id, userData.name, userData.email, userData.password);
-                user.getProductList().setProduct(userData.productList.product);
+                if (userData.productList) {
+                    const products = userData.productList.product.map((product: any) => {
+                        return new Product(product.description, Number(product.quantity || 1));
+                    })
+                    user.getProductList().setProduct(products);
+                }
                 users.push(user);
             });
-    
+
             return users;
-        } catch(error) {
-            return []
+        } catch (error) {
+            console.log(error);
+            return [];
         }
     }
 
@@ -44,24 +49,33 @@ class UserRepositoryDatabase {
     async addProduct(userId: string, products: Product[]) {
         const users = await this.getAll();
         const findUser = users.find((user) => user.getId() == userId);
-        if (!findUser){
+        if (!findUser) {
             throw new Error('User does not exists');
         }
         products.forEach((product) => {
-            console.log(product);
             findUser.getProductList().addProduct(product);
         });
-        await this.saveUsers([findUser]);
+
+        await this.saveUsers(users);
     }
 
     async removeProduct(userId: string, productDescription: string) {
         const users = await this.getAll();
         const findUser = users.find((user) => user.getId() == userId);
-        if (!findUser){
+        if (!findUser) {
             throw new Error('User does not exists');
         }
-        findUser.getProductList(); 
-        await this.saveUsers([findUser]);
+        findUser.getProductList().removeProduct(productDescription);
+        await this.saveUsers(users);
+    }
+
+    async getAllProductsFromUser(userId: string): Promise<ProductList | null> {
+        const users = await this.getAll();
+        const findUser = users.find((user) => user.getId() == userId);
+        if (!findUser) {
+            return null;
+        }
+        return findUser.getProductList();
     }
 }
 

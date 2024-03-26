@@ -17,16 +17,18 @@ const loginUser = (rl, userLogado) => {
                     data: user
                 })
                     .then(response => {
-                        // rl.close();
                         if (response.data.login){
                             userLogado = response.data.login;
+                        }
+                        else{
+                            console.log("E-mail ou senha incorreto(s).");
                         }
                         resolve(userLogado);
                     })
                     .catch(error => {
                         // rl.close();
                         reject(new Error('Login inválido'));
-                        console.log('Erro ao realizar login: ', error);
+                        console.log('Erro ao realizar login');
                     });
             });
         });

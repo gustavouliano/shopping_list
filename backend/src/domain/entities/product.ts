@@ -2,11 +2,11 @@
 class Product {
 
     private description: string;
-    private value: number;
+    private quantity: number;
 
-    constructor(description: string, value: number){
+    constructor(description: string, quantity: number){
         this.description = description;
-        this.value = value;
+        this.quantity = quantity;
     }
 
     public getDescription(): string {
@@ -17,12 +17,12 @@ class Product {
         this.description = description;
     }
 
-    public getValue(): number {
-        return this.value;
+    public getQuantity(): number {
+        return this.quantity;
     }
 
-    public setValue(value: number) {
-        this.value = value;
+    public setQuantity(quantity: number) {
+        this.quantity = quantity;
     }
 
 }

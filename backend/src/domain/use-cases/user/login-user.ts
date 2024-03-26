@@ -15,7 +15,7 @@ class LoginUserUseCase {
         if (!user){
             return false;
         }
-        const correctPassword = CryptoProvider.compare(password, user.getPassword());
+        const correctPassword = await CryptoProvider.compare(password, user.getPassword());
         if (!correctPassword) {
             return false;
         }

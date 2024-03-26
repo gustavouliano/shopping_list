@@ -48,7 +48,6 @@ class User {
     }
 
     public getProductList(): ProductList {
-        console.log(this.productList);
         if (!this.productList){
             this.productList = new ProductList();
         }
